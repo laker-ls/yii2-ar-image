@@ -3,10 +3,10 @@
 </h1>
 
 
-[![Stable Version](https://poser.pugx.org/laker-ls/yii2-ar-image/v/stable)](https://packagist.org/packages/laker-ls/yii2-nested-set-menu)
-[![Unstable Version](https://poser.pugx.org/laker-ls/yii2-ar-image/v/unstable)](https://packagist.org/packages/laker-ls/yii2-nested-set-menu)
-[![License](https://poser.pugx.org/laker-ls/yii2-ar-image/license)](https://packagist.org/packages/laker-ls/yii2-nested-set-menu)
-[![Total Downloads](https://poser.pugx.org/laker-ls/yii2-ar-image/downloads)](https://packagist.org/packages/laker-ls/yii2-nested-set-menu)
+[![Stable Version](https://poser.pugx.org/laker-ls/yii2-ar-image/v/stable)](https://packagist.org/packages/laker-ls/yii2-ar-image)
+[![Unstable Version](https://poser.pugx.org/laker-ls/yii2-ar-image/v/unstable)](https://packagist.org/packages/laker-ls/yii2-ar-image)
+[![License](https://poser.pugx.org/laker-ls/yii2-ar-image/license)](https://packagist.org/packages/laker-ls/yii2-ar-image)
+[![Total Downloads](https://poser.pugx.org/laker-ls/yii2-ar-image/downloads)](https://packagist.org/packages/laker-ls/yii2-ar-image)
 
 Это расширение предназначено для загрузки изображений на yii2 и содержит в себе WidgetInput и Behavior.
 
