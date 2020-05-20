@@ -1,0 +1,28 @@
+{
+    "name": "laker-ls/yii2-ar-image",
+    "description": "A behavior to upload images.",
+    "keywords": ["yii2", "extension", "behavior"],
+    "homepage": "https://github.com/laker-ls/yii2-ar-image",
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Владислав Сусып",
+            "email": "vladislav_susyp@bk.ru",
+            "homepage": "https://github.com/laker-ls"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2-imagine": "~2.2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "lakerLS\\arImage\\": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
