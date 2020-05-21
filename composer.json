@@ -1,7 +1,7 @@
 {
     "name": "laker-ls/yii2-ar-image",
-    "description": "A behavior to upload images.",
-    "keywords": ["yii2", "extension", "behavior"],
+    "description": "A set for upload, delete and display images.",
+    "keywords": ["yii2", "extension", "behavior", "widget", "widgetInput"],
     "homepage": "https://github.com/laker-ls/yii2-ar-image",
     "type": "yii2-extension",
     "license": "BSD-3-Clause",
@@ -22,7 +22,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.1.x-dev"
+            "dev-master": "0.2.x-dev"
         }
     }
 }

@@ -1,21 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace lakerLS\arImage\widgets;
 
 use lakerLS\arImage\helpers\MainHelper;
 use yii\widgets\InputWidget;
 
-class ArImageWidget extends InputWidget
+class ArImageInput extends InputWidget
 {
-    /**
-     * @var array $thumbnails параметры для миниатюр.
-     * (integer) width - ширина миниатюры в пикселях.
-     * (integer) height - высота миниатюры в пикселях.
-     * ПРИМЕР:
-     * ['thumbnails' => ['width' => 200, 'height' => 100]]
-     */
-    public $thumbnails;
-
     /**
      * @var string $cartSize размер карточек по умолчанию.
      * Варианты: normal|large
@@ -31,8 +24,6 @@ class ArImageWidget extends InputWidget
         $modelName = MainHelper::dynamicClass($this->model);
 
         return $this->render('../../views/ar-image-input', [
-            'thumbnailsWidth' => $this->thumbnails['width'],
-            'thumbnailsHeight' => $this->thumbnails['height'],
             'images' => $images,
             'groupName' => $modelName,
             'inputName' => $this->attribute,

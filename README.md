@@ -2,7 +2,6 @@
     yii2-ar-image
 </h1>
 
-
 [![Stable Version](https://poser.pugx.org/laker-ls/yii2-ar-image/v/stable)](https://packagist.org/packages/laker-ls/yii2-ar-image)
 [![Unstable Version](https://poser.pugx.org/laker-ls/yii2-ar-image/v/unstable)](https://packagist.org/packages/laker-ls/yii2-ar-image)
 [![License](https://poser.pugx.org/laker-ls/yii2-ar-image/license)](https://packagist.org/packages/laker-ls/yii2-ar-image)
@@ -20,13 +19,13 @@
 Для установки запустите
 
 ```
-$ php composer.phar require laker-ls/yii2-ar-image "~0.1.0"
+$ php composer.phar require laker-ls/yii2-ar-image "~0.2.0"
 ```
 
 или добавьте в `composer.json` в раздел `require` следующую строку
 
 ```
-"laker-ls/yii2-ar-image": "~0.1.0"
+"laker-ls/yii2-ar-image": "~0.2.0"
 ```
 
 > Смотрите [список изменений](https://github.com/laker-ls/yii2-ar-image/blob/master/CHANGE.md) для подробной информации о версиях.
@@ -35,28 +34,22 @@ $ php composer.phar require laker-ls/yii2-ar-image "~0.1.0"
 
 Использования виджета в ActiveRecord:
 ```php
-use lakerLS\arImage\widgets\ArImageWidget;
+use lakerLS\arImage\widgets\ArImageInput;
 
-echo $form->field($model, 'image')->widget(ArImageWidget::class, [
-    'thumbnails' => [
-        'width' => 300,
-        'height' => 200,
-    ]
-]);
+echo $form->field($model, 'image')->widget(ArImageInput::class);
 ```
 
-`thumbnails` - обязательное свойство, в котором указываются размеры миниатюры. <br />
 `cartSize` - размер карточек изображений. По умолчанию 'normal'. Возможные значения: normal, large. <br />
 
 Подключение поведения в необходимой модели:
 ```php
-use lakerLS\arImage\behaviors\ArImageBehaviors;
+use lakerLS\arImage\behaviors\ArImageBehavior;
 
 public function behaviors()
 {
     return [
         'ArImageBehaviors' => [
-            'class' => ArImageBehaviors::class,
+            'class' => ArImageBehavior::class,
             'fields' => ['image'],
         ]
     ];
@@ -64,9 +57,28 @@ public function behaviors()
 ```
 
 `fields` - обязательное свойство, в котором указываются поля таблицы, в которых будут сохраняться изображения. <br />
-`imageFolderOriginal` - расположение оригинальных изображений в папке `web`. <br />
-`imageFolderThumbnail` - расположение миниатюр изображений в папке `web`. <br />
-`imageNotFound` - расположение изображения в папке `web`, которое используется при отсутствии необходимого изображения. <br />
+`imageFolderOriginal` - путь к папке, в которой хранятся оригинальные изображения. <br />
+`imageNotFound` - путь к изображению, которое используется при отсутствии оригинала. <br />
+
+Использование виджета для отображения изображений на странице. Создает миниатюру изображения.
+```php
+use lakerLS\arImage\widgets\ArImageThumbnail; 
+
+$result = ArImageThumbnail::widget([
+    'src' => $src,
+    'size' => ['width' => 300, 'height' => 200],
+    'options' => [
+        'alt' => 'Наименование изображения',
+        'data-examplt' => 'Необходимые атрибуты'
+    ],
+]);
+```
+
+`src` - путь, по которому хранится оригинальное изображение.
+`size` - размеры миниатюры.
+`options` - свойства тега img.
+`imageFolderThumbnail` - путь к папке, в которой хранятся миниатюры изображения. <br />
+`imageNotFound` - путь к изображению, из которого будет создана миниатюра, если оригинал отсутствует. <br />
 
 ## Лицензия
 

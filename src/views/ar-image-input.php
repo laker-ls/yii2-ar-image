@@ -5,8 +5,6 @@ declare(strict_types=1);
 use lakerLS\arImage\ArImageAsset;
 
 /**
- * @var int $thumbnailsWidth
- * @var int $thumbnailsHeight
  * @var array $images
  * @var string $groupName
  * @var string $inputName
@@ -35,7 +33,7 @@ $bundle = ArImageAsset::register($this);
             echo $this->renderFile(__DIR__ . '/_cart.php', [
                 'preview' => false,
                 'groupName' => $groupName,
-                'src' => $image['srcOriginal'],
+                'src' => $image['src'],
                 'nameOld' => $image['nameOld'] . '.' . $image['extension'],
                 'nameNew' => $image['nameNew'],
                 'alt' => $image['nameOld'],
@@ -49,8 +47,6 @@ $bundle = ArImageAsset::register($this);
         <div>
             <div class="btn skin-file-input"><i class="icon-folder-open-empty"></i> <span>Выбрать изображения</span></div>
             <input type="file" name="<?= "{$groupName}[{$inputName}][]" ?>" accept="image/*" multiple>
-            <input type="hidden" name="<?= "{$groupName}[{$inputName}Options][thumbnailsWidth]" ?>" value="<?= $thumbnailsWidth ?>">
-            <input type="hidden" name="<?= "{$groupName}[{$inputName}Options][thumbnailsHeight]" ?>" value="<?= $thumbnailsHeight ?>">
         </div>
         <div>
             <div class="btn btn-danger delete-all-img"><i class="icon-cancel-circled2"></i> Удалить все изображения</div>
