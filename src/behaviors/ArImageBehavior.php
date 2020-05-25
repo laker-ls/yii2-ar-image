@@ -58,10 +58,15 @@ class ArImageBehavior extends Behavior
     {
         $modelName = MainHelper::dynamicClass($event->sender);
         $post = Yii::$app->request->post($modelName);
-        $positions = $post['position'];
+        $positions = $post['arPosition'];
 
         foreach ($this->fields as $field) {
+            $oldData = $event->sender->$field;
+            if (is_array($oldData)) {
+                throw new \Exception('Form must have a property "multipart/form-data".');
+            }
             $oldData = !empty($event->sender->$field) ? unserialize($event->sender->$field) : [];
+            $oldData = $oldData ? $oldData : [];
 
             $images = UploadedFile::getInstancesByName("{$modelName}[{$field}]");
             $newData = [];
@@ -70,7 +75,7 @@ class ArImageBehavior extends Behavior
                 $newData[] = $this->prepareData($image, $srcOriginal);
             }
 
-            $imagesForDelete = $this->selectImagesForDelete($oldData, $post['position']);
+            $imagesForDelete = $this->selectImagesForDelete($oldData, $post['arPosition']);
             foreach ($imagesForDelete as $imageDelete) {
                 $this->arImage->deleteImage($imageDelete);
             }
@@ -93,7 +98,7 @@ class ArImageBehavior extends Behavior
         foreach ($this->fields as $field) {
             $imagesForDelete = !empty($event->sender->$field) ? unserialize($event->sender->$field) : [];
             foreach ($imagesForDelete as $imageDelete) {
-            $this->arImage->deleteImage($imageDelete);
+                $this->arImage->deleteImage($imageDelete);
             }
         }
     }

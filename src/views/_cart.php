@@ -16,7 +16,7 @@ declare(strict_types=1);
 ?>
 
 <div class="<?= $cartSize ?> draggable <?= $preview ? 'new' : 'old' ?>">
-    <input type="hidden" name="<?= "{$groupName}[position][{$nameNew}]" ?>" value="<?= $position ?>">
+    <input type="hidden" name="<?= "{$groupName}[arPosition][{$nameNew}]" ?>" value="<?= $position ?>">
     <div class="cart">
         <?php if ($preview != true) : ?>
         <div class="delete-img">

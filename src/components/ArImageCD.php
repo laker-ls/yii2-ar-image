@@ -55,14 +55,14 @@ class ArImageCD
      */
     public function createThumbnail(string $srcOriginal, array $size) : string
     {
-        $nameImage = explode('/', $srcOriginal);
-        $nameImage = array_pop($nameImage);
+        $piecesPath = explode('/', $srcOriginal);
+        $nameImage = array_pop($piecesPath);
+        $date = array_pop($piecesPath);
         $this->nameImage = $nameImage;
-
         $fullPathOriginal = Yii::getAlias('@webroot' . $srcOriginal);
 
         $sizeAsString = implode('x', $size);
-        $pathThumbnail = $this->generateFolder($this->imageFolder, $sizeAsString);
+        $pathThumbnail = $this->generateFolder($this->imageFolder, $sizeAsString, $date);
 
         if (!file_exists($fullPathOriginal)) {
             $fullPathOriginal = Yii::getAlias('@webroot/' . $this->imageNotFound);
@@ -96,15 +96,18 @@ class ArImageCD
         $fullPathThumbnail = explode('/', $fullPathThumbnail);
         $nameThumbnail = array_pop($fullPathThumbnail);
         $fullPathThumbnail = implode('/', $fullPathThumbnail);
-        $foldersSize = scandir($fullPathThumbnail);
-        unset($foldersSize[0], $foldersSize[1]);
-        foreach($foldersSize as $folderSize) {
-            $images = scandir($fullPathThumbnail . '/' . $folderSize);
-            unset($images[0], $images[1]);
-            foreach ($images as $name) {
-                $thumbnailImage = $fullPathThumbnail . '/' . $folderSize . '/' . $name;
-                if (file_exists($thumbnailImage) && $name == $nameThumbnail) {
-                    unlink($thumbnailImage);
+
+        if (file_exists($fullPathThumbnail)) {
+            $foldersSize = scandir($fullPathThumbnail);
+            unset($foldersSize[0], $foldersSize[1]);
+            foreach($foldersSize as $folderSize) {
+                $images = scandir($fullPathThumbnail . '/' . $folderSize);
+                unset($images[0], $images[1]);
+                foreach ($images as $name) {
+                    $thumbnailImage = $fullPathThumbnail . '/' . $folderSize . '/' . $name;
+                    if (file_exists($thumbnailImage) && $name == $nameThumbnail) {
+                        unlink($thumbnailImage);
+                    }
                 }
             }
         }
@@ -130,16 +133,17 @@ class ArImageCD
      * Создание папок и формирование полного пути.
      * @param string $imageFolder
      * @param string|null $size
+     * @param string|null $date
      * @return array
      */
-    private function generateFolder(string $imageFolder, string $size = null) :array
+    private function generateFolder(string $imageFolder, string $size = null, string $date = null) :array
     {
         $rootPath = Yii::getAlias('@webroot/') . $imageFolder;
-        $data = date('y-m-d');
+        $date = $date ?? date('y-m-d');
         $size .= $size ? '/' : null;
 
-        $fullPath = $rootPath . '/' . $data . '/' . $size;
-        $relativePath = '/' . $imageFolder . '/' . $data . '/' . $size;
+        $fullPath = $rootPath . '/' . $date . '/' . $size;
+        $relativePath = '/' . $imageFolder . '/' . $date . '/' . $size;
 
         if (!is_dir($fullPath)) {
             mkdir($fullPath, 0777, true);

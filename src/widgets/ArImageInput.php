@@ -13,7 +13,7 @@ class ArImageInput extends InputWidget
      * @var string $cartSize размер карточек по умолчанию.
      * Варианты: normal|large
      */
-    public $cartSize = 'normal';
+    public $cartSize = 'small';
 
     public function run()
     {
@@ -21,6 +21,7 @@ class ArImageInput extends InputWidget
 
         $images = $this->model->attributes[$this->attribute];
         $images = $images ? unserialize($images) : [];
+        $images = $images ? $images : [];
         $modelName = MainHelper::dynamicClass($this->model);
 
         return $this->render('../../views/ar-image-input', [
@@ -34,12 +35,18 @@ class ArImageInput extends InputWidget
     private function getCartSize()
     {
         switch ($this->cartSize) {
-            case 'normal':
+            case 'extra-small':
                 return 'col-lg-1';
-            case 'large':
+            case 'small':
                 return 'col-lg-2';
+            case 'normal':
+                return 'col-lg-4';
+            case 'large':
+                return 'col-lg-6';
+            case 'extra-large':
+                return 'col-lg-12';
             default:
-                throw new Exception('Property "cartSize" have not correct value.');
+                throw new \Exception('Property "cartSize" have not correct value.');
         }
     }
 }

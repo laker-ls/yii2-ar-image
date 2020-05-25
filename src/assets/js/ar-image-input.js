@@ -1,15 +1,25 @@
 (function () {
     'use strict';
 
-    /** Главный DOM элемент. */
+    let body = $("body");
+
+    /** Главный элемент виджета. */
     let mainSelectorElement = ".ar-image";
     let mainDomElement = $(mainSelectorElement);
 
+    /** Все селекторы, которые использует модуль */
+    let selector = {
+        form: mainSelectorElement + " form",
+        skinUploadInput: mainSelectorElement + " .skin-file-input",
+        uploadInput: mainSelectorElement + " input[type=file]",
+        deleteButton: mainSelectorElement + " .delete-img a",
+        deleteAllButton: mainSelectorElement + " .delete-all-img",
+        btnSmallCart: mainSelectorElement + " .small-cart",
+        btnLargeCart: mainSelectorElement + " .large-cart",
+    };
+
     /** Все DOM элементы, к которым обращается модуль. */
     let domElement = {
-        /** Форма отправки. */
-        form: mainDomElement.closest("form"),
-
         /** Окно с карточками изображений. */
         previewAll: mainDomElement.find(".preview"),
         preview: (self) => {return $(self).closest(mainSelectorElement).find(".preview")},
@@ -31,33 +41,21 @@
         /** Карточки изображений выбранные для загрузки. */
         cartNew: (self) => {return $(self).closest(mainSelectorElement).find(".preview .draggable.new")},
 
-        /** Инпут выбора изображений. */
-        uploadInput: mainDomElement.find("input[type=file]"),
-
         /** Элемент стилизованный под кнопку выбора изображений. */
-        skinUploadInputAll: mainDomElement.find(".skin-file-input"),
         skinUploadInput: (self) => {return $(self).siblings(".skin-file-input")},
-
-        /** "Кнопка" удаления загруженного на сервер изображения. */
-        deleteButton: mainDomElement.find(".delete-img a"),
-
-        /** "Кнопка" удаления всех загруженных на сервер изображений. */
-        deleteAllButton: mainDomElement.find(".delete-all-img"),
 
         /** Шаблон карточки, используемый для создания карточек, после выбора изображений. */
         exampleCart: mainDomElement.find(".example-cart"),
 
         /** Кнопка "большие значки" */
-        btnLargeCartAll: mainDomElement.find(".large-cart"),
         btnLargeCart: (self) => {return $(self).siblings(".large-cart")},
 
         /** Кнопка "Маленькие значки" */
-        btnSmallCartAll: mainDomElement.find(".small-cart"),
         btnSmallCart: (self) => {return $(self).siblings(".small-cart")},
     };
 
     /** Событие выбора изображений для загрузки.  */
-    domElement.uploadInput.on("change", function () {
+    body.on("change", selector.uploadInput, function () {
         let self = this,
             length = this.files.length,
             quantity = domElement.cart(self).length;
@@ -78,7 +76,7 @@
                 let modifiedExampleCart;
 
                 modifiedExampleCart = domElement.exampleCart.html()
-                    .replace(/{imgSrc}/gi, fileReader.result)
+                    .replace(/#{imgSrc}/gi, fileReader.result)
                     .replace(/{name}/gi, file.name)
                     .replace(/{nameNew}/gi, file.name.split('.')[0])
                     .replace(/{imgPosition}/gi, quantity);
@@ -91,7 +89,7 @@
     });
 
     /** Событие удаления изображения, которое уже находится на сервере. */
-    domElement.deleteButton.on("click", function (event) {
+    body.on("click", selector.deleteButton, function (event) {
         event.preventDefault();
 
         if (confirm("Вы уверены, что хотите удалить изображение?")) {
@@ -100,14 +98,14 @@
     });
 
     /** Событие удаления всех изображений, которые уже находятся на сервере. */
-    domElement.deleteAllButton.on("click", function () {
+    body.on("click", selector.deleteAllButton, function () {
         if (confirm("Вы уверены, что хотите удалить все изображения?")) {
             domElement.cartOld(this).remove();
         }
     });
 
     /** Событие переключение карточек на большой размер */
-    domElement.btnLargeCartAll.on("click", function () {
+    body.on("click", selector.btnLargeCart, function () {
         if ($(this).attr("class").indexOf("active") === -1) {
             domElement.preview(this).css({"min-height": "258px"});
             domElement.cart(this).removeClass("col-lg-1");
@@ -118,7 +116,7 @@
     });
 
     /** Событие переключение карточек на маленький размер */
-    domElement.btnSmallCartAll.on("click", function () {
+    body.on("click", selector.btnSmallCart, function () {
         if ($(this).attr("class").indexOf("active") === -1) {
             domElement.preview(this).css({"min-height": "157px"});
             domElement.cart(this).removeClass("col-lg-2");
@@ -129,12 +127,12 @@
     });
 
     /** Вызов fileInput по кастомизированной кнопке выбора файлов. */
-    domElement.skinUploadInputAll.on("click", function () {
+    body.on("click", selector.skinUploadInput, function () {
         $(this).siblings("input[type=file]").click();
     });
 
     /** Изменение значения "position" при отправке формы */
-    domElement.form.on("submit", function () {
+    body.on("submit", selector.form, function () {
         domElement.cart(this).each(function (index, element) {
             $(element).find("input").val(index);
         })

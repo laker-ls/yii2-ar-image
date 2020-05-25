@@ -10,8 +10,8 @@ use yii\helpers\Html;
 
 class ArImageThumbnail extends Widget
 {
-    /** @var string $src путь к оригинальному изображению. */
-    public $src;
+    /** @var string $images сериализованный массив с изображениями. */
+    public $images;
 
     /** @var array $size размеры миниатюры. */
     public $size;
@@ -29,8 +29,18 @@ class ArImageThumbnail extends Widget
     {
         parent::run();
 
-        $arImageCD = new ArImageCD($this->imageFolderThumbnail, $this->imageNotFound);
-        $srcThumbnail = $arImageCD->createThumbnail($this->src, $this->size);
+        if (is_string($this->images)) {
+            $images = unserialize($this->images);
+        } else {
+            $images[] = $this->images;
+        }
+
+        if ($images[0]['src']) {
+            $arImageCD = new ArImageCD($this->imageFolderThumbnail, $this->imageNotFound);
+            $srcThumbnail = $arImageCD->createThumbnail($images[0]['src'], $this->size);
+        } else {
+            $srcThumbnail = '/' . $this->imageNotFound;
+        }
 
         return Html::img($srcThumbnail, $this->options);
     }
