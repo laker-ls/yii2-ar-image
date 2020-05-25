@@ -9,7 +9,7 @@
 
     /** Все селекторы, которые использует модуль */
     let selector = {
-        form: mainSelectorElement + " form",
+        form: " form",
         skinUploadInput: mainSelectorElement + " .skin-file-input",
         uploadInput: mainSelectorElement + " input[type=file]",
         deleteButton: mainSelectorElement + " .delete-img a",
