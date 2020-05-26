@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace lakerLS\arImage\widgets;
 
+use Imagine\Image\ManipulatorInterface;
 use lakerLS\arImage\components\ArImageCD;
 use yii\base\Widget;
 use yii\helpers\Html;
@@ -16,8 +17,11 @@ class ArImageThumbnail extends Widget
     /** @var array $size размеры миниатюры. */
     public $size;
 
-    /** @var array Свойства тега img */
+    /** @var array $options Свойства тега img */
     public $options = [];
+
+    /** @var int $mode способ создания миниатюры, все варианты смотрите в данном интерфейсе. */
+    public $mode = ManipulatorInterface::THUMBNAIL_OUTBOUND;
 
     /** @var string $imageFolderThumbnail путь к папке с миниатюрами изображений. */
     public $imageFolderThumbnail = 'ar_upload/thumbnail';
@@ -37,7 +41,7 @@ class ArImageThumbnail extends Widget
 
         if ($images[0]['src']) {
             $arImageCD = new ArImageCD($this->imageFolderThumbnail, $this->imageNotFound);
-            $srcThumbnail = $arImageCD->createThumbnail($images[0]['src'], $this->size);
+            $srcThumbnail = $arImageCD->createThumbnail($images[0]['src'], $this->size, $this->mode);
         } else {
             $srcThumbnail = '/' . $this->imageNotFound;
         }

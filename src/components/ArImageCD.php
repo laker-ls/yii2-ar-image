@@ -51,9 +51,10 @@ class ArImageCD
      * Создание миниатюры изображения.
      * @param string $srcOriginal
      * @param array $size
+     * @param int $mode
      * @return string
      */
-    public function createThumbnail(string $srcOriginal, array $size) : string
+    public function createThumbnail(string $srcOriginal, array $size, int $mode) : string
     {
         $piecesPath = explode('/', $srcOriginal);
         $nameImage = array_pop($piecesPath);
@@ -69,7 +70,7 @@ class ArImageCD
         }
 
         if (!file_exists($pathThumbnail['full'])) {
-            $thumbnail = Image::thumbnail($fullPathOriginal, $size['width'], $size['height']);
+            $thumbnail = Image::thumbnail($fullPathOriginal, $size['width'], $size['height'], $mode);
             if ($thumbnail->save($pathThumbnail['full'])) {
                 return $pathThumbnail['relative'];
             } else {
