@@ -165,19 +165,21 @@ class ArImageBehavior extends Behavior
      */
     private function sortByPosition(array $data, array $positions) : array
     {
-        $quantityImages = count($data);
-        for ($i = 0; $i < $quantityImages; $i++) {
+        $newArrayImages = [];
+        foreach ($data as $image) {
             foreach ($positions as $name => $newKey) {
-                if ($data[$i]["nameNew"] == $name || ($data[$i]["nameNew"] != $name && $data[$i]["nameOld"] == $name)) {
-                    $data[$i]['position'] = $newKey;
+                if ($image["nameNew"] == $name || ($image["nameNew"] != $name && $image["nameOld"] == $name)) {
+                    $image['position'] = ($newKey + 1);
+                    $newArrayImages[] = $image;
+                    break;
                 }
             }
         }
-        uasort($data, function ($a, $b) {
+        uasort($newArrayImages, function ($a, $b) {
             return ($a['position'] > $b['position']);
         });
-        $data = array_values($data);
+        $newArrayImages = array_values($newArrayImages);
 
-        return $data;
+        return $newArrayImages;
     }
 }

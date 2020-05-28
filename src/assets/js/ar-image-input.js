@@ -133,6 +133,7 @@
 
     /** Изменение значения "position" при отправке формы */
     body.on("submit", selector.form, function () {
+        domElement.exampleCart.remove();
         domElement.cart(this).each(function (index, element) {
             $(element).find("input").val(index);
         })

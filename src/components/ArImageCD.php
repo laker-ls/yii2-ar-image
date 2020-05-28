@@ -18,8 +18,11 @@ class ArImageCD
     /** @var string $imageFolder путь к оригинальному изображению. */
     private $imageFolder;
 
-    /** @var string $imageNotFound путь к изображению, которе используется при отсутствии оригинала. */
-    private $imageNotFound;
+    /** @var string $imageNotFoundRelative путь к изображению, которе используется при отсутствии оригинала. */
+    private $imageNotFoundRelative;
+
+    /** @var string $imageNotFoundFull путь к изображению от корня, которе используется при отсутствии оригинала. */
+    private $imageNotFoundFull;
 
     /** @var string $imageName наименование загружаемого изображения.  */
     private $nameImage;
@@ -27,7 +30,8 @@ class ArImageCD
     public function __construct(string $imageFolder, string $imageNotFound)
     {
         $this->imageFolder = $imageFolder;
-        $this->imageNotFound = $imageNotFound;
+        $this->imageNotFoundRelative = $imageNotFound;
+        $this->imageNotFoundFull = Yii::getAlias('@webroot/') . $imageNotFound;
     }
 
     /**
@@ -40,11 +44,11 @@ class ArImageCD
         $this->nameImage = $this->generateNameImage($image->baseName, $image->extension);
         $path = $this->generateFolder($this->imageFolder);
 
-        if ($image->saveAs($path['full'])) {
-            return $path['relative'];
-        } else {
-            return '/' . $this->imageNotFound;
+        if (!$image->saveAs($path['full'])) {
+            copy($this->imageNotFoundFull, $path['full']);
         }
+
+        return $path['relative'];
     }
 
     /**
@@ -66,7 +70,7 @@ class ArImageCD
         $pathThumbnail = $this->generateFolder($this->imageFolder, $sizeAsString, $date);
 
         if (!file_exists($fullPathOriginal)) {
-            $fullPathOriginal = Yii::getAlias('@webroot/' . $this->imageNotFound);
+            $fullPathOriginal = $this->imageNotFoundFull;
         }
 
         if (!file_exists($pathThumbnail['full'])) {
@@ -74,7 +78,7 @@ class ArImageCD
             if ($thumbnail->save($pathThumbnail['full'])) {
                 return $pathThumbnail['relative'];
             } else {
-                return '/' . $this->imageNotFound;
+                return '/' . $this->imageNotFoundRelative;
             }
         } else {
             return $pathThumbnail['relative'];
