@@ -20,20 +20,22 @@ class ArImageBehavior extends Behavior
      * @var array $fields обязательный параметр со списком полей, в которых необходимо обрабатывать изображения.
      * Пример: ['image', 'text']
      */
-    public $fields;
+    public array $fields;
 
     /** @var string $imageFolderOriginal путь к папке, в которой хранятся оригинальные изображения. */
-    public $imageFolderOriginal = 'ar_upload/original';
+    public string $imageFolderOriginal = 'ar_upload/original';
 
-    /** @var string $imageNotFound путь к изображению, которое используется при отсутствии оригинала. */
-    public $imageNotFound = 'ar_upload/image-not-found.jpg';
+    /** @var string|null $imageNotFound путь к изображению в папке web, которое используется при отсутствии оригинала.
+     * При значении 'null' используется изображение по умолчанию. */
+    public ?string $imageNotFound = null;
 
     /** @var ArImageCD $arImage объект для работы с физическими изображениями. */
-    private $arImage;
+    private ArImageCD $arImage;
 
     public function __construct($config = [])
     {
         parent::__construct($config);
+
         $this->arImage = new ArImageCD($this->imageFolderOriginal, $this->imageNotFound);
     }
 
@@ -54,37 +56,38 @@ class ArImageBehavior extends Behavior
      * @param ModelEvent $event
      * @return void
      */
-    public function eventInsertUpdate(ModelEvent $event) :void
+    public function eventInsertUpdate(ModelEvent $event) : void
     {
         $modelName = MainHelper::dynamicClass($event->sender);
         $post = Yii::$app->request->post($modelName);
         $positions = $post['arPosition'];
 
-        foreach ($this->fields as $field) {
-            $oldData = $event->sender->$field;
-            if (is_array($oldData)) {
-                throw new \Exception('Form must have a property "multipart/form-data".');
+        if ($positions) {
+            foreach ($this->fields as $field) {
+                $oldData = $event->sender->$field;
+                if (is_array($oldData)) {
+                    throw new \Exception('Form must have a property "multipart/form-data".');
+                }
+                $oldData = !empty($event->sender->$field) ? unserialize($event->sender->$field) : [];
+                $oldData = $oldData ? $oldData : [];
+
+                $images = UploadedFile::getInstancesByName("{$modelName}[{$field}]");
+                $newData = [];
+                foreach ($images as $key => $image) {
+                    $srcOriginal = $this->arImage->uploadOriginal($image);
+                    $newData[] = $this->prepareData($image, $srcOriginal);
+                }
+
+                $imagesForDelete = $this->selectImagesForDelete($oldData, $post['arPosition']);
+                foreach ($imagesForDelete as $imageDelete) {
+                    $this->arImage->deleteImage($imageDelete);
+                }
+                $result = ArrayHelper::merge($oldData, $newData);
+                $result = $this->sortByPosition($result, $positions);
+                $result = serialize($result);
+
+                $event->sender->$field = $result;
             }
-            $oldData = !empty($event->sender->$field) ? unserialize($event->sender->$field) : [];
-            $oldData = $oldData ? $oldData : [];
-
-            $images = UploadedFile::getInstancesByName("{$modelName}[{$field}]");
-            $newData = [];
-            foreach ($images as $key => $image) {
-                $srcOriginal = $this->arImage->uploadOriginal($image);
-                $newData[] = $this->prepareData($image, $srcOriginal);
-            }
-
-            $imagesForDelete = $this->selectImagesForDelete($oldData, $post['arPosition']);
-            foreach ($imagesForDelete as $imageDelete) {
-                $this->arImage->deleteImage($imageDelete);
-            }
-
-            $result = ArrayHelper::merge($oldData, $newData);
-            $result = $this->sortByPosition($result, $positions);
-            $result = serialize($result);
-
-            $event->sender->$field = $result;
         }
     }
 
@@ -93,7 +96,7 @@ class ArImageBehavior extends Behavior
      * @param Event $event
      * @return void
      */
-    public function eventDelete(Event $event) :void
+    public function eventDelete(Event $event) : void
     {
         foreach ($this->fields as $field) {
             $imagesForDelete = !empty($event->sender->$field) ? unserialize($event->sender->$field) : [];

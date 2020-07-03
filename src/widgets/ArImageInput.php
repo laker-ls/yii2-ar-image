@@ -11,9 +11,9 @@ class ArImageInput extends InputWidget
 {
     /**
      * @var string $cartSize размер карточек по умолчанию.
-     * Варианты: normal|large
+     * Варианты: extra-small|small|normal|large|extra-large
      */
-    public $cartSize = 'small';
+    public string $cartSize = 'normal';
 
     public function run()
     {
@@ -32,19 +32,19 @@ class ArImageInput extends InputWidget
         ]);
     }
 
-    private function getCartSize()
+    private function getCartSize() : string
     {
         switch ($this->cartSize) {
             case 'extra-small':
-                return 'col-lg-1';
+                return 'table';
             case 'small':
-                return 'col-lg-2';
+                return 'col-lg-1';
             case 'normal':
-                return 'col-lg-4';
+                return 'col-lg-2';
             case 'large':
-                return 'col-lg-6';
+                return 'col-lg-4';
             case 'extra-large':
-                return 'col-lg-12';
+                return 'col-lg-6';
             default:
                 throw new \Exception('Property "cartSize" have not correct value.');
         }

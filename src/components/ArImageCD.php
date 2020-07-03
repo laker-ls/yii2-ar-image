@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace lakerLS\arImage\components;
 
+use lakerLS\arImage\ArImageAsset;
+use yii\web\AssetManager;
 use yii\web\UploadedFile;
 use yii\imagine\Image;
 use Yii;
@@ -16,22 +18,25 @@ use Yii;
 class ArImageCD
 {
     /** @var string $imageFolder путь к оригинальному изображению. */
-    private $imageFolder;
+    private string $imageFolder;
 
     /** @var string $imageNotFoundRelative путь к изображению, которе используется при отсутствии оригинала. */
-    private $imageNotFoundRelative;
+    private string $imageNotFoundRelative;
 
     /** @var string $imageNotFoundFull путь к изображению от корня, которе используется при отсутствии оригинала. */
-    private $imageNotFoundFull;
+    private string $imageNotFoundFull;
 
     /** @var string $imageName наименование загружаемого изображения.  */
-    private $nameImage;
+    private string $nameImage;
 
-    public function __construct(string $imageFolder, string $imageNotFound)
+    public function __construct(string $imageFolder, ?string $imageNotFound)
     {
-        $this->imageFolder = $imageFolder;
+        if ($imageNotFound == null) {
+            $imageNotFound = '';
+        }
         $this->imageNotFoundRelative = $imageNotFound;
         $this->imageNotFoundFull = Yii::getAlias('@webroot/') . $imageNotFound;
+        $this->imageFolder = $imageFolder;
     }
 
     /**
@@ -45,6 +50,7 @@ class ArImageCD
         $path = $this->generateFolder($this->imageFolder);
 
         if (!$image->saveAs($path['full'])) {
+            $this->setImageNotFoundPaths();
             copy($this->imageNotFoundFull, $path['full']);
         }
 
@@ -56,9 +62,10 @@ class ArImageCD
      * @param string $srcOriginal
      * @param array $size
      * @param int $mode
+     * @param int $quality
      * @return string
      */
-    public function createThumbnail(string $srcOriginal, array $size, int $mode) : string
+    public function createThumbnail(string $srcOriginal, array $size, int $mode, int  $quality) : string
     {
         $piecesPath = explode('/', $srcOriginal);
         $nameImage = array_pop($piecesPath);
@@ -70,12 +77,13 @@ class ArImageCD
         $pathThumbnail = $this->generateFolder($this->imageFolder, $sizeAsString, $date);
 
         if (!file_exists($fullPathOriginal)) {
+            $this->setImageNotFoundPaths();
             $fullPathOriginal = $this->imageNotFoundFull;
         }
 
         if (!file_exists($pathThumbnail['full'])) {
             $thumbnail = Image::thumbnail($fullPathOriginal, $size['width'], $size['height'], $mode);
-            if ($thumbnail->save($pathThumbnail['full'])) {
+            if ($thumbnail->save($pathThumbnail['full'], ['quality' => $quality])) {
                 return $pathThumbnail['relative'];
             } else {
                 return '/' . $this->imageNotFoundRelative;
@@ -158,5 +166,18 @@ class ArImageCD
             'full' => $fullPath . $this->nameImage,
             'relative' => $relativePath . $this->nameImage,
         ];
+    }
+
+    /**
+     * Установка пути к изображению "image-not-found), если используется путь по умолчанию.
+     *
+     */
+    private function setImageNotFoundPaths() : void
+    {
+        $bundle = new ArImageAsset();
+        $bundle->publish(new AssetManager());
+
+        $this->imageNotFoundRelative = mb_substr($bundle->baseUrl . '/image/image-not-found.jpg', 1);
+        $this->imageNotFoundFull = $bundle->basePath . '\image\image-not-found.jpg';
     }
 }

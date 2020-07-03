@@ -11,37 +11,35 @@ use yii\helpers\Html;
 
 class ArImageThumbnail extends Widget
 {
-    /** @var string $images сериализованный массив с изображениями. */
-    public $images;
+    /** @var array $images сериализованный массив с изображениями. */
+    public array $images;
 
     /** @var array $size размеры миниатюры. */
-    public $size;
+    public array $size;
+
+    /** @var int $quality качество миниатюры. */
+    public int $quality = 50;
 
     /** @var array $options Свойства тега img */
-    public $options = [];
+    public array $options = [];
 
     /** @var int $mode способ создания миниатюры, все варианты смотрите в данном интерфейсе. */
-    public $mode = ManipulatorInterface::THUMBNAIL_OUTBOUND;
+    public int $mode = ManipulatorInterface::THUMBNAIL_OUTBOUND;
 
     /** @var string $imageFolderThumbnail путь к папке с миниатюрами изображений. */
-    public $imageFolderThumbnail = 'ar_upload/thumbnail';
+    public string $imageFolderThumbnail = 'ar_upload/thumbnail';
 
-    /** @var string $imageNotFound путь к изображению, из которого будет создана миниатюра, если оригинал отсутствует. */
-    public $imageNotFound = 'ar_upload/image-not-found.jpg';
+    /** @var string|null $imageNotFound путь к изображению в папке web, которое используется при отсутствии оригинала.
+     * При значении 'null' используется изображение по умолчанию. */
+    public ?string $imageNotFound = null;
 
     public function run()
     {
         parent::run();
 
-        if (is_string($this->images)) {
-            $images = unserialize($this->images);
-        } else {
-            $images[] = $this->images;
-        }
-
-        if ($images[0]['src']) {
+        if ($this->images['src']) {
             $arImageCD = new ArImageCD($this->imageFolderThumbnail, $this->imageNotFound);
-            $srcThumbnail = $arImageCD->createThumbnail($images[0]['src'], $this->size, $this->mode);
+            $srcThumbnail = $arImageCD->createThumbnail($this->images['src'], $this->size, $this->mode, $this->quality);
         } else {
             $srcThumbnail = '/' . $this->imageNotFound;
         }
