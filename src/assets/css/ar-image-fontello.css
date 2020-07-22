@@ -54,10 +54,12 @@
   /* Uncomment for 3D effect */
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
- 
+
 .icon-cancel:before { content: '\e800'; } /* '' */
 .icon-th:before { content: '\e801'; } /* '' */
 .icon-th-large:before { content: '\e802'; } /* '' */
 .icon-th-list:before { content: '\e803'; } /* '' */
 .icon-cancel-circled2:before { content: '\e804'; } /* '' */
+.icon-th-outline:before { content: '\e805'; } /* '' */
+.icon-th-large-outline:before { content: '\e806'; } /* '' */
 .icon-folder-open-empty:before { content: '\f4c2'; } /* '' */

@@ -16,15 +16,11 @@ $bundle = ArImageAsset::register($this);
 
 <div class="ar-image">
     <div class="example-cart" style="display: none">
-        <?= $this->renderFile(__DIR__ . '/_cart.php', [
+        <?= $this->renderFile(__DIR__ . '/_exampleCart.php', [
             'preview' => true,
             'groupName' => $groupName,
-            'src' => '#{imgSrc}',
-            'nameOld' => '{name}',
-            'nameNew' => '{nameNew}',
-            'alt' => '{alt}',
-            'position' => '{imgPosition}',
             'cartSize' => $cartSize,
+            'bundle' => $bundle,
         ]) ?>
     </div>
     <div class="preview row">
@@ -52,8 +48,11 @@ $bundle = ArImageAsset::register($this);
             <div class="btn btn-danger delete-all-img"><i class="icon-cancel-circled2"></i> Удалить все изображения</div>
         </div>
         <div>
-            <div class="btn small-cart <?= $cartSize == 'col-lg-1' ? 'active' : null ?>" title="Маленькие изображения"><i class="icon-th"></i></div>
-            <div class="btn large-cart <?= $cartSize == 'col-lg-2' ? 'active' : null ?>" title="Крупные изображения"><i class="icon-th-large"></i></div>
+            <div class="btn extra-small-cart <?= $cartSize == 'table' ? 'active' : null ?>" title="Список изображений"><i class="icon-th-list"></i></div>
+            <div class="btn small-cart <?= $cartSize == 'col-lg-1' ? 'active' : null ?>" title="Маленькие изображения"><i class="icon-th-outline"></i></div>
+            <div class="btn normal-cart <?= $cartSize == 'col-lg-2' ? 'active' : null ?>" title="Средние изображения"><i class="icon-th"></i></div>
+            <div class="btn large-cart <?= $cartSize == 'col-lg-4' ? 'active' : null ?>" title="Крупные изображения"><i class="icon-th-large-outline"></i></div>
+            <div class="btn extra-large-cart <?= $cartSize == 'col-lg-6' ? 'active' : null ?>" title="Огромные изображения"><i class="icon-th-large"></i></div>
         </div>
     </div>
 </div>
