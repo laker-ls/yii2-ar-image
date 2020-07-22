@@ -11,8 +11,8 @@ use yii\helpers\Html;
 
 class ArImageThumbnail extends Widget
 {
-    /** @var array $images сериализованный массив с изображениями. */
-    public array $images;
+    /** @var array $image сериализованный массив с изображением. */
+    public array $image;
 
     /** @var array $size размеры миниатюры. */
     public array $size;
@@ -37,9 +37,9 @@ class ArImageThumbnail extends Widget
     {
         parent::run();
 
-        if ($this->images['src']) {
+        if ($this->image['src']) {
             $arImageCD = new ArImageCD($this->imageFolderThumbnail, $this->imageNotFound);
-            $srcThumbnail = $arImageCD->createThumbnail($this->images['src'], $this->size, $this->mode, $this->quality);
+            $srcThumbnail = $arImageCD->createThumbnail($this->image['src'], $this->size, $this->mode, $this->quality);
         } else {
             $srcThumbnail = '/' . $this->imageNotFound;
         }
