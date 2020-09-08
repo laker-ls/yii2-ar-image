@@ -22,13 +22,6 @@ class ArImageBehavior extends Behavior
      */
     public array $fields;
 
-    /** @var string $imageFolderOriginal путь к папке, в которой хранятся оригинальные изображения. */
-    public string $imageFolderOriginal = 'ar_upload/original';
-
-    /** @var string|null $imageNotFound путь к изображению в папке web, которое используется при отсутствии оригинала.
-     * При значении 'null' используется изображение по умолчанию. */
-    public ?string $imageNotFound = null;
-
     /** @var ArImageCD $arImage объект для работы с физическими изображениями. */
     private ArImageCD $arImage;
 
@@ -36,7 +29,7 @@ class ArImageBehavior extends Behavior
     {
         parent::__construct($config);
 
-        $this->arImage = new ArImageCD($this->imageFolderOriginal, $this->imageNotFound);
+        $this->arImage = new ArImageCD('ar_upload/original');
     }
 
     /**

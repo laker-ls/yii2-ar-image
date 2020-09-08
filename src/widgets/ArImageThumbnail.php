@@ -12,7 +12,7 @@ use yii\helpers\Html;
 class ArImageThumbnail extends Widget
 {
     /** @var array $image сериализованный массив с изображением. */
-    public array $image;
+    public ?array $image;
 
     /** @var array $size размеры миниатюры. */
     public array $size;
@@ -26,22 +26,15 @@ class ArImageThumbnail extends Widget
     /** @var int $mode способ создания миниатюры, все варианты смотрите в данном интерфейсе. */
     public int $mode = ManipulatorInterface::THUMBNAIL_OUTBOUND;
 
-    /** @var string $imageFolderThumbnail путь к папке с миниатюрами изображений. */
-    public string $imageFolderThumbnail = 'ar_upload/thumbnail';
-
-    /** @var string|null $imageNotFound путь к изображению в папке web, которое используется при отсутствии оригинала.
-     * При значении 'null' используется изображение по умолчанию. */
-    public ?string $imageNotFound = null;
-
     public function run()
     {
         parent::run();
 
-        if ($this->image['src']) {
-            $arImageCD = new ArImageCD($this->imageFolderThumbnail, $this->imageNotFound);
+        $arImageCD = new ArImageCD('ar_upload/thumbnail');
+        if (!empty($this->image['src'])) {
             $srcThumbnail = $arImageCD->createThumbnail($this->image['src'], $this->size, $this->mode, $this->quality);
         } else {
-            $srcThumbnail = '/' . $this->imageNotFound;
+            $srcThumbnail = $arImageCD->getImageNotFoundRelative();
         }
 
         return Html::img($srcThumbnail, $this->options);

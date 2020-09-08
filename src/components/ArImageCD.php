@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace lakerLS\arImage\components;
 
-use lakerLS\arImage\ArImageAsset;
-use yii\web\AssetManager;
 use yii\web\UploadedFile;
 use yii\imagine\Image;
 use Yii;
@@ -29,13 +27,10 @@ class ArImageCD
     /** @var string $imageName наименование загружаемого изображения.  */
     private string $nameImage;
 
-    public function __construct(string $imageFolder, ?string $imageNotFound)
+    public function __construct(string $imageFolder)
     {
-        if ($imageNotFound == null) {
-            $imageNotFound = '';
-        }
-        $this->imageNotFoundRelative = $imageNotFound;
-        $this->imageNotFoundFull = Yii::getAlias('@webroot/') . $imageNotFound;
+        $this->imageNotFoundRelative = '/ar_upload/image-not-found.jpg';
+        $this->imageNotFoundFull = Yii::getAlias('@webroot') . $this->imageNotFoundRelative;
         $this->imageFolder = $imageFolder;
     }
 
@@ -50,7 +45,6 @@ class ArImageCD
         $path = $this->generateFolder($this->imageFolder);
 
         if (!$image->saveAs($path['full'])) {
-            $this->setImageNotFoundPaths();
             copy($this->imageNotFoundFull, $path['full']);
         }
 
@@ -77,7 +71,6 @@ class ArImageCD
         $pathThumbnail = $this->generateFolder($this->imageFolder, $sizeAsString, $date);
 
         if (!file_exists($fullPathOriginal)) {
-            $this->setImageNotFoundPaths();
             $fullPathOriginal = $this->imageNotFoundFull;
         }
 
@@ -129,6 +122,15 @@ class ArImageCD
     }
 
     /**
+     * Получить относительный путь к изображению "изображение не найдено".
+     * @return string
+     */
+    public function getImageNotFoundRelative() : string
+    {
+        return $this->imageNotFoundRelative;
+    }
+
+    /**
      * Создание нового, уникального имени для изображения.
      * @param string $name
      * @param string $extenstion
@@ -166,18 +168,5 @@ class ArImageCD
             'full' => $fullPath . $this->nameImage,
             'relative' => $relativePath . $this->nameImage,
         ];
-    }
-
-    /**
-     * Установка пути к изображению "image-not-found), если используется путь по умолчанию.
-     *
-     */
-    private function setImageNotFoundPaths() : void
-    {
-        $bundle = new ArImageAsset();
-        $bundle->publish(new AssetManager());
-
-        $this->imageNotFoundRelative = mb_substr($bundle->baseUrl . '/image/image-not-found.jpg', 1);
-        $this->imageNotFoundFull = $bundle->basePath . '\image\image-not-found.jpg';
     }
 }

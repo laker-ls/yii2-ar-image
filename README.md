@@ -19,13 +19,13 @@
 Для установки запустите
 
 ```
-$ php composer.phar require laker-ls/yii2-ar-image "~0.5.0"
+$ php composer.phar require laker-ls/yii2-ar-image "~0.6.0"
 ```
 
 или добавьте в `composer.json` в раздел `require` следующую строку
 
 ```
-"laker-ls/yii2-ar-image": "~0.5.0"
+"laker-ls/yii2-ar-image": "~0.6.0"
 ```
 
 > Смотрите [список изменений](https://github.com/laker-ls/yii2-ar-image/blob/master/CHANGE.md) для подробной информации о версиях.
@@ -60,18 +60,34 @@ public function behaviors()
 `imageFolderOriginal` - путь к папке, в которой хранятся оригинальные изображения. <br />
 `imageNotFound` - путь к изображению, которое используется при отсутствии оригинала. <br />
 
-Использование виджета для отображения изображений на странице. Создает миниатюру изображения.
+Использование виджета для отображения изображений на странице. Отображение одного изображения.
 ```php
 use lakerLS\arImage\widgets\ArImageThumbnail; 
 
 $result = ArImageThumbnail::widget([
-    'src' => $src,
+    'image' => unserialize($model->images)[0],
     'size' => ['width' => 300, 'height' => 200],
     'options' => [
         'alt' => 'Наименование изображения',
         'data-examplt' => 'Необходимые атрибуты'
     ],
 ]);
+```
+
+Использование виджета для отображения изображений на странице. Отображение нескольких изображений.
+```php
+use lakerLS\arImage\widgets\ArImageThumbnail; 
+
+foreach (unserialize($model->images) as $image) {
+    $result = ArImageThumbnail::widget([
+        'image' => $image,
+        'size' => ['width' => 300, 'height' => 200],
+        'options' => [
+            'alt' => 'Наименование изображения',
+            'data-examplt' => 'Необходимые атрибуты'
+        ],
+    ]);
+}
 ```
 
 `src` - путь, по которому хранится оригинальное изображение.
