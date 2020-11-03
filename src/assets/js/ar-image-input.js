@@ -73,11 +73,10 @@
          * @param minHeight int - минимальная высота preview окна
          * @param sizeClass string - класс размера (col-lg-1 и т.д.)
          */
-        resizeCart: function (self, minHeight, sizeClass) {
+        resizeCart: function (self, sizeClass) {
             if ($(self).attr("class").indexOf("active") === -1) {
                 let cartSize = domElement.cartSize(self);
 
-                domElement.preview(self).css({"min-height": minHeight + "px"});
                 cartSize.removeAttr("class");
                 cartSize.addClass("cart-size " + sizeClass);
                 domElement.btnSizeAll(self).removeClass("active");
@@ -142,27 +141,27 @@
 
     /** События переключения карточек на список */
     body.on("click", selector.btnExtraSmallCart, function () {
-        utils.resizeCart(this, 245, "list-records");
+        utils.resizeCart(this, "list-records");
     });
 
     /** Событие переключения карточек на маленький размер */
     body.on("click", selector.btnSmallCart, function () {
-        utils.resizeCart(this, 157, "col-lg-1");
+        utils.resizeCart(this, "col-lg-1");
     });
 
     /** Событие переключения карточек на средний размер */
     body.on("click", selector.btnNormalCart, function () {
-        utils.resizeCart(this, 245, "col-lg-2");
+        utils.resizeCart(this, "col-lg-2");
     });
 
     /** Событие переключения карточек на большой размер */
     body.on("click", selector.btnLargeCart, function () {
-        utils.resizeCart(this, 437, "col-lg-4");
+        utils.resizeCart(this, "col-lg-4");
     });
 
     /** Событие переключения карточек на огромный размер */
     body.on("click", selector.btnExtraLargeCart, function () {
-        utils.resizeCart(this, 635, "col-lg-6");
+        utils.resizeCart(this, "col-lg-6");
     });
 
     /** Вызов fileInput по кастомизированной кнопке выбора файлов. */

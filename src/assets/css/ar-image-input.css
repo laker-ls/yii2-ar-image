@@ -104,36 +104,6 @@
     transition: 200ms;
 }
 
-/*********************************/
-
-.ar-image .col-lg-1 .cart {
-    height: 126px;
-}
-.ar-image .col-lg-1 .img-container {
-    height: 61px;
-}
-
-.ar-image .col-lg-2 .cart {
-    height: 230px;
-}
-.ar-image .col-lg-2 .img-container {
-    height: 167px;
-}
-
-.ar-image .col-lg-4 .cart {
-    height: 423px;
-}
-.ar-image .col-lg-4 .img-container {
-    height: 356px;
-}
-
-.ar-image .col-lg-6 .cart {
-    height: 635px;
-}
-.ar-image .col-lg-6 .img-container {
-    height: 570px;
-}
-
 /********************************/
 
 .list-records {
