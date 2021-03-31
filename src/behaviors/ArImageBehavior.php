@@ -53,7 +53,7 @@ class ArImageBehavior extends Behavior
     {
         $modelName = MainHelper::dynamicClass($event->sender);
         $post = Yii::$app->request->post($modelName);
-        $positions = $post['arPosition'];
+        $positions = ArrayHelper::getValue($post, 'arPosition');
 
         if ($positions) {
             foreach ($this->fields as $field) {
