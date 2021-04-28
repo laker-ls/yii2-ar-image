@@ -19,9 +19,7 @@ class ArImageInput extends InputWidget
     {
         parent::run();
 
-        $images = $this->model->attributes[$this->attribute];
-        $images = $images ? unserialize($images) : [];
-        $images = $images ? $images : [];
+        $images = $this->imagesAsArray();
         $modelName = MainHelper::dynamicClass($this->model);
 
         return $this->render('../../views/ar-image-input', [
@@ -30,6 +28,18 @@ class ArImageInput extends InputWidget
             'inputName' => $this->attribute,
             'cartSize' => $this->getCartSize(),
         ]);
+    }
+
+    private function imagesAsArray() : array
+    {
+        $imagesAsString = $this->model->attributes[$this->attribute];
+        if (is_array($imagesAsString)) {
+            throw new \Exception('Form must have a property "multipart/form-data".');
+        }
+        $imagesAsArray = $imagesAsString ? unserialize($imagesAsString) : [];
+        $imagesAsArray = $imagesAsString ? $imagesAsString : [];
+
+        return $imagesAsArray;
     }
 
     private function getCartSize() : string

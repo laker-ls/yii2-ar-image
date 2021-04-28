@@ -9,8 +9,6 @@
 
 Это расширение предназначено для загрузки изображений на yii2 и содержит в себе WidgetInput и Behavior.
 
-> ВАЖНО: Расширение находится в активной разработке, без совместимости с предыдущими мажорными релизами.
-
 ## Установка
 
 Рекомендуемый способ установки этого расширения является использование [composer](http://getcomposer.org/download/).
@@ -19,13 +17,13 @@
 Для установки запустите
 
 ```
-$ php composer.phar require laker-ls/yii2-ar-image "~0.6.2"
+$ php composer.phar require laker-ls/yii2-ar-image "~0.6.3"
 ```
 
 или добавьте в `composer.json` в раздел `require` следующую строку
 
 ```
-"laker-ls/yii2-ar-image": "~0.6.2"
+"laker-ls/yii2-ar-image": "~0.6.3"
 ```
 
 > Смотрите [список изменений](https://github.com/laker-ls/yii2-ar-image/blob/master/CHANGE.md) для подробной информации о версиях.
