@@ -36,8 +36,7 @@ class ArImageInput extends InputWidget
         if (is_array($imagesAsString)) {
             throw new \Exception('Form must have a property "multipart/form-data".');
         }
-        $imagesAsArray = $imagesAsString ? unserialize($imagesAsString) : [];
-        $imagesAsArray = $imagesAsString ? $imagesAsString : [];
+        $imagesAsArray = !empty($imagesAsString) ? unserialize($imagesAsString) : [];
 
         return $imagesAsArray;
     }
