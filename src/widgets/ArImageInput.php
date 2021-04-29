@@ -22,7 +22,7 @@ class ArImageInput extends InputWidget
         $images = $this->imagesAsArray();
         $modelName = MainHelper::dynamicClass($this->model);
 
-        return $this->render('../../views/ar-image-input', [
+        return $this->render('@vendor/laker-ls/yii2-ar-image/src/views/ar-image-input', [
             'images' => $images,
             'groupName' => $modelName,
             'inputName' => $this->attribute,
