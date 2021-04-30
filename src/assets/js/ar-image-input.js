@@ -97,7 +97,7 @@
             domElement.skinUploadInput(self).find("span").html("Выбрать изображения");
         }
 
-        domElement.cartNew(self).closest("div").remove();
+        domElement.cartNew(self).parent().remove();
         for (let i = 0; i < length; i++) {
             let file = this.files[i],
                 modifiedExampleCart;

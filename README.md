@@ -17,13 +17,13 @@
 Для установки запустите
 
 ```
-$ php composer.phar require laker-ls/yii2-ar-image "~0.6.5"
+$ php composer.phar require laker-ls/yii2-ar-image "~0.6.6"
 ```
 
 или добавьте в `composer.json` в раздел `require` следующую строку
 
 ```
-"laker-ls/yii2-ar-image": "~0.6.5"
+"laker-ls/yii2-ar-image": "~0.6.6"
 ```
 
 > Смотрите [список изменений](https://github.com/laker-ls/yii2-ar-image/blob/master/CHANGE.md) для подробной информации о версиях.
