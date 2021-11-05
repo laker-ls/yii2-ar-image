@@ -136,13 +136,13 @@ class ArImageBehavior extends Behavior
     {
         $nameOld = explode('.', $image->name);
         array_pop($nameOld);
-        $nameOld = implode('', $nameOld);
+        $nameOld = implode('.', $nameOld);
 
         $nameNew = explode('/', $srcOriginal);
         $nameNew = array_pop($nameNew);
         $nameNew = explode('.', $nameNew);
         array_pop($nameNew);
-        $nameNew = implode('', $nameNew);
+        $nameNew = implode('.', $nameNew);
 
         $data['src'] = $srcOriginal;
         $data['nameOld'] = $nameOld;

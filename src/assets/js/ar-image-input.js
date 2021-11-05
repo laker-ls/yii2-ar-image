@@ -12,7 +12,7 @@
         form: " form",
         skinUploadInput: mainSelectorElement + " .skin-file-input",
         uploadInput: mainSelectorElement + " input[type=file]",
-        deleteButton: mainSelectorElement + " .delete-img a",
+        deleteButton: mainSelectorElement + " a.delete-img",
         deleteAllButton: mainSelectorElement + " .delete-all-img",
 
         btnExtraSmallCart: mainSelectorElement + " .extra-small-cart",
@@ -82,6 +82,16 @@
                 domElement.btnSizeAll(self).removeClass("active");
                 $(self).addClass("active");
             }
+        },
+
+        /**
+         * Форматирование названия изображения.
+         * @param nameRaw string
+         */
+        toFormatName: function (nameRaw){
+            let nameNew = nameRaw.split('.');
+            nameNew.pop();
+            return nameNew.join('.');
         }
     }
 
@@ -100,11 +110,12 @@
         domElement.cartNew(self).parent().remove();
         for (let i = 0; i < length; i++) {
             let file = this.files[i],
-                modifiedExampleCart;
+                modifiedExampleCart,
+                name = utils.toFormatName(file.name);
 
             modifiedExampleCart = domElement.exampleCart.html()
                 .replace(/{name}/gi, file.name)
-                .replace(/{nameNew}/gi, file.name.split('.')[0])
+                .replace(/{nameNew}/gi, name)
                 .replace(/{imgPosition}/gi, quantity)
                 .replace(/{modified}/gi, file.lastModified);
             domElement.preview(self).append(modifiedExampleCart);

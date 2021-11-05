@@ -20,7 +20,6 @@ use lakerLS\arImage\ArImageAsset;
             <div class="img-container">
                 <img data-modified="{modified}" src="<?= $bundle->baseUrl . '/image/placeholder.jpg' ?>" alt="{alt}">
             </div>
-            <p>{name}</p>
         </div>
     </div>
 </div>
